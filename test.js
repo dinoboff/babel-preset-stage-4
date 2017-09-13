@@ -7,6 +7,8 @@ const v4 = require('./plugins/4.json');
 const v6 = require('./plugins/6.json');
 const v8 = require('./plugins/8.json');
 
+const cjs = ['babel-plugin-transform-es2015-modules-commonjs'];
+
 test('plugins are dependencies', t => {
 	const set = new Set(Object.keys(dependencies));
 
@@ -21,6 +23,23 @@ test('plugins are dependencies', t => {
 	for (const plugin of v8) {
 		t.true(set.has(plugin), `v8 plugin ${plugin}`);
 	}
+
+	for (const plugin of cjs) {
+		t.true(set.has(plugin), `plugin ${plugin}`);
+	}
+});
+
+test('plugins module transform plugin is configurable', t => {
+	const buildPreset = require('./');
+
+	for (const module of cjs) {
+		const plugin = require(module);
+
+		t.false(buildPreset({}, {modules: false}).plugins.some(p => p === plugin));
+
+		t.true(buildPreset().plugins.some(p => p === plugin));
+		t.true(buildPreset({}, {modules: 'commonjs'}).plugins.some(p => p === plugin));
+	}
 });
 
 function buildsCorrectPreset(t, version, mapping) {
@@ -34,7 +53,8 @@ function buildsCorrectPreset(t, version, mapping) {
 		})
 	});
 
-	const {plugins} = buildPreset();
+	const {plugins} = buildPreset({}, {modules: false});
+
 	require(mapping).forEach((module, index) => {
 		t.is(require(module), plugins[index], `${module} at index ${index}`);
 	});
@@ -42,7 +62,10 @@ function buildsCorrectPreset(t, version, mapping) {
 buildsCorrectPreset.title = (_, version) => `builds correct preset for Node.js ${version}`;
 
 function computesCorrectPackageHash(t, version, mapping) {
-	const expected = require(mapping).map(module => require.resolve(`${module}/package.json`));
+	const expected = ['babel-plugin-transform-es2015-modules-commonjs']
+		.concat(require(mapping))
+		.map(module => require.resolve(`${module}/package.json`));
+
 	t.plan(2);
 
 	proxyquire('./package-hash', {

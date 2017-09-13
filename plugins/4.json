@@ -4,7 +4,6 @@
   "babel-plugin-transform-async-to-generator",
   "babel-plugin-transform-es2015-destructuring",
   "babel-plugin-transform-es2015-function-name",
-  "babel-plugin-transform-es2015-modules-commonjs",
   "babel-plugin-transform-es2015-parameters",
   "babel-plugin-transform-es2015-spread",
   "babel-plugin-transform-es2015-sticky-regex",

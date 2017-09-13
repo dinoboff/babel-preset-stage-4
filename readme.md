@@ -25,6 +25,21 @@ Add `@ava/stage-4` to your [Babel] presets.
 Require `@ava/babel-preset-stage-4/package-hash` to get a combined hash for the installed version of the preset, as well as the plugins that were selected for the active Node.js version.
 
 
+## Options
+
+For more information on setting options for a preset, refer to the [plugin/preset options] documentation.
+
+
+### `modules`
+
+`"commonjs" | false`, defaults to `"commonjs"`.
+
+Enable transformation of ES6 module syntax to another module type.
+
+Setting this to `false` will not transform modules.
+
+
 [AVA]: https://ava.li
 [Babel]: https://babeljs.io
+[plugin/preset options]: http://babeljs.io/docs/plugins/#plugin-preset-options
 [node.green]: http://node.green
